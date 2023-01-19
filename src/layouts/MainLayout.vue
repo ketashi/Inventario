@@ -5,7 +5,7 @@
       style="min-height: 00vh"
       class="shadow-2 rounded-borders"
     >
-      <q-header elevated class="primary">
+      <q-header elevated class="bg-purple-8">
         <q-toolbar>
           <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
           <q-toolbar-title>Inventario</q-toolbar-title>
@@ -85,6 +85,6 @@ export default {
 <style>
 .my-menu-link {
   color: white;
-  background: #f2c037;
+  background: #791e71;
 }
 </style>
