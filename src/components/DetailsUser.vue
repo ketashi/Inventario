@@ -5,7 +5,6 @@
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
-
     <q-card-section class="scroll">
       <q-list v-for="(value, name) in store.details[0]" :key="name">
         <q-item>
