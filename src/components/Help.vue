@@ -12,7 +12,7 @@
                   class="q-mr-md text-purple-8"
                 />
                 <q-item-section>
-                  <q-item-label> Herramientas a Utilizar</q-item-label>
+                  <q-item-label> Iconos a Utilizar</q-item-label>
                   <q-item-label caption> Guia básica</q-item-label>
                 </q-item-section>
               </q-item>

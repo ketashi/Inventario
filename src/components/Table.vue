@@ -11,37 +11,106 @@
       v-model:pagination="pagination"
       hide-pagination
       class="my-sticky-column-table"
+      :visible-columns="visibleColumns"
     >
       <!-- header -->
       <template v-slot:top="props">
-        <div class="col-4 q-table__title">Inventario del Active Directory</div>
-        <q-space />
-        <q-input
-          borderless
-          dense
-          debounce="300"
-          v-model="filter"
-          placeholder="Buscar"
-        >
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
+        <div class="row justify-center">
+          <div class="col-md-6 col-sm-12 q-table__title">
+            Inventario del Active Directory
+          </div>
+          <div class="col-md-6 col-sm-12 align-center">
+            <q-select
+              v-model="visibleColumns"
+              multiple
+              outlined
+              dense
+              options-dense
+              emit-value
+              map-options
+              :options="store.columns"
+              option-value="name"
+              options-cover
+              label="Filtro"
+              stack-label
+              transition-show="flip-up"
+              transition-hide="flip-down"
+              behavior="dialog"
+            >
+              <template v-slot:selected-item="scope">
+                <q-chip
+                  removable
+                  dense
+                  @remove="scope.removeAtIndex(scope.index)"
+                  :tabindex="scope.tabindex"
+                  color="white"
+                  text-color="purple"
+                  class="q-ma-none"
+                >
+                  {{ scope.opt.label }}
+                </q-chip>
+              </template>
 
-        <q-btn
-          flat
-          round
-          dense
-          :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-          @click="props.toggleFullscreen"
-          class="q-ml-md"
-        />
+              <template
+                v-slot:option="{ itemProps, opt, selected, toggleOption }"
+              >
+                <q-item v-bind="itemProps">
+                  <q-item-section>
+                    {{ opt.label }}
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-toggle
+                      :model-value="selected"
+                      @update:model-value="toggleOption(opt)"
+                    />
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+          <div class="col col-sm-12 row justify-end">
+            <q-input
+              borderless
+              dense
+              debounce="300"
+              v-model="filter"
+              placeholder="Buscar"
+            >
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+
+            <q-btn
+              flat
+              round
+              dense
+              :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+              @click="props.toggleFullscreen"
+              class="q-ml-md"
+            />
+          </div>
+        </div>
       </template>
       <!-- body -->
       <template v-slot:body-cell-action="props">
         <q-td :props="props">
           <div class="q-pa-md q-gutter-sm">
-            <q-btn round class="bg-blue text-white" icon="preview" size="sm" />
+            <q-btn
+              round
+              class="bg-blue text-white"
+              icon="preview"
+              size="sm"
+              @click="details(props.row)"
+            >
+              <q-dialog
+                v-model="preview"
+                transition-show="rotate"
+                transition-hide="rotate"
+              >
+                <DetailsAccount />
+              </q-dialog>
+            </q-btn>
             <q-btn round class="bg-purple text-white" icon="edit" size="sm" />
             <q-btn
               round
@@ -79,11 +148,18 @@
 <script>
 import { ref, computed } from "vue";
 import { userStore } from "src/stores/activeDirectory/userTable";
+import DetailsAccount from "./DetailsUser.vue";
 import { useQuasar } from "quasar";
 
 export default {
+  components: {
+    DetailsAccount,
+  },
   setup() {
     //state
+    const id = ref("");
+    const preview = ref(false);
+    const filter = ref("");
     const $q = useQuasar();
     const store = userStore();
     const pagination = ref({
@@ -92,6 +168,15 @@ export default {
       page: 2,
       rowsPerPage: 5,
     });
+    const visibleColumns = ref([
+      "displayName",
+      "typeName",
+      "idCustodio",
+      "office",
+      "title",
+      "lastlogondate",
+      "action",
+    ]);
     //methods
     function notifDelete(props) {
       $q.notify({
@@ -104,7 +189,7 @@ export default {
             label: "Aceptar",
             color: "blue-10",
             handler: () => {
-              store.increment(props.name);
+              store.increment(props.samAccountName);
               $q.notify({
                 message: "Se elimino el registro seleccionado.",
                 color: "primary",
@@ -123,6 +208,10 @@ export default {
         ],
       });
     }
+    function details(props) {
+      preview.value = true;
+      store.detailsItem(props.samAccountName);
+    }
     //computed
     const pagesNumber = computed(() =>
       Math.ceil(store.rows.length / pagination.value.rowsPerPage)
@@ -132,11 +221,15 @@ export default {
     //call actions
     //return
     return {
-      filter: ref(""),
+      filter,
       pagination,
       pagesNumber,
       store,
       notifDelete,
+      details,
+      visibleColumns,
+      preview,
+      id,
     };
   },
 };
