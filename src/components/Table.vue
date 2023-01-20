@@ -17,7 +17,8 @@
       <template v-slot:top="props">
         <div class="row justify-center">
           <div class="col-md-6 col-sm-12 q-table__title">
-            Inventario del Active Directory
+            <q-icon name="table_view"></q-icon>
+            <label for="table_view"> Inventario del Active Directory </label>
           </div>
           <div class="col-md-6 col-sm-12 align-center">
             <q-select
@@ -31,7 +32,7 @@
               :options="store.columns"
               option-value="name"
               options-cover
-              label="Filtro"
+              label="Filtro de Columnas"
               stack-label
               transition-show="flip-up"
               transition-hide="flip-down"
