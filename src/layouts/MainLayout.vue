@@ -18,7 +18,7 @@
         :mini="miniState"
         @mouseover="miniState = false"
         @mouseout="miniState = true"
-        :width="200"
+        :width="250"
         :breakpoint="500"
         bordered
         class="bg-grey-3"
@@ -33,21 +33,81 @@
               <q-item-section> Dashboard </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple active-class="my-menu-link" to="/user">
-              <q-item-section avatar>
-                <q-icon name="face" />
-              </q-item-section>
+            <q-expansion-item
+              expand-separator
+              icon="admin_panel_settings"
+              label="Directorio Activo"
+            >
+              <q-expansion-item
+                :header-inset-level="0.2"
+                expand-separator
+                icon="table_view"
+                label="Tabla de Registro"
+                clickable
+                to="/tactive"
+                active-class="my-menu-link"
+                v-ripple
+              ></q-expansion-item>
+              <q-expansion-item
+                :header-inset-level="0.2"
+                expand-separator
+                icon="person_add"
+                label="Crear de Registro"
+                clickable
+                active-class="my-menu-link"
+                v-ripple
+              ></q-expansion-item>
+            </q-expansion-item>
 
-              <q-item-section> User </q-item-section>
-            </q-item>
+            <q-expansion-item
+              expand-separator
+              icon="account_balance"
+              label="Bantotal"
+            >
+              <q-expansion-item
+                :header-inset-level="0.2"
+                expand-separator
+                icon="table_view"
+                label="Tabla de Registro"
+                clickable
+                active-class="my-menu-link"
+                v-ripple
+              ></q-expansion-item>
+              <q-expansion-item
+                :header-inset-level="0.2"
+                expand-separator
+                icon="person_add"
+                label="Crear de Registro"
+                clickable
+                active-class="my-menu-link"
+                v-ripple
+              ></q-expansion-item>
+            </q-expansion-item>
 
-            <q-item clickable v-ripple active-class="my-menu-link">
-              <q-item-section avatar>
-                <q-icon name="send" />
-              </q-item-section>
-
-              <q-item-section> Send </q-item-section>
-            </q-item>
+            <q-expansion-item
+              expand-separator
+              icon="call_to_action"
+              label="SBS"
+            >
+              <q-expansion-item
+                :header-inset-level="0.2"
+                expand-separator
+                icon="table_view"
+                label="Tabla de Registro"
+                clickable
+                active-class="my-menu-link"
+                v-ripple
+              ></q-expansion-item>
+              <q-expansion-item
+                :header-inset-level="0.2"
+                expand-separator
+                icon="person_add"
+                label="Crear de Registro"
+                clickable
+                active-class="my-menu-link"
+                v-ripple
+              ></q-expansion-item>
+            </q-expansion-item>
 
             <q-separator />
 
@@ -56,7 +116,7 @@
                 <q-icon name="drafts" />
               </q-item-section>
 
-              <q-item-section> Drafts </q-item-section>
+              <q-item-section> SALIR </q-item-section>
             </q-item>
           </q-list>
         </q-scroll-area>

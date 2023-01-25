@@ -104,6 +104,9 @@
               size="sm"
               @click="details(props.row)"
             >
+              <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                Ver registro
+              </q-tooltip>
               <q-dialog
                 v-model="preview"
                 transition-show="rotate"
@@ -112,14 +115,37 @@
                 <DetailsAccount />
               </q-dialog>
             </q-btn>
-            <q-btn round class="bg-purple text-white" icon="edit" size="sm" />
+            <q-btn
+              round
+              class="bg-purple text-white"
+              icon="edit"
+              size="sm"
+              @click="eactive = true"
+            >
+              <q-tooltip class="bg-purple" :offset="[10, 10]">
+                Editar Registro
+              </q-tooltip>
+              <q-dialog
+                v-model="eactive"
+                persistent
+                :maximized="maximizedToggle"
+                transition-show="slide-up"
+                transition-hide="slide-down"
+              >
+                <EditActive />
+              </q-dialog>
+            </q-btn>
             <q-btn
               round
               class="bg-red text-white"
               icon="delete"
               size="sm"
               @click="notifDelete(props.row)"
-            />
+            >
+              <q-tooltip class="bg-red" :offset="[10, 10]">
+                Eliminar Registro
+              </q-tooltip>
+            </q-btn>
           </div>
         </q-td>
       </template>
@@ -150,14 +176,18 @@
 import { ref, computed } from "vue";
 import { userStore } from "src/stores/activeDirectory/userTable";
 import DetailsAccount from "./DetailsUser.vue";
+import EditActive from "./EditActive.vue";
 import { useQuasar } from "quasar";
 
 export default {
   components: {
     DetailsAccount,
+    EditActive,
   },
   setup() {
     //state
+    const eactive = ref(false);
+    const maximizedToggle = ref(true);
     const id = ref("");
     const preview = ref(false);
     const filter = ref("");
@@ -231,6 +261,8 @@ export default {
       visibleColumns,
       preview,
       id,
+      eactive,
+      maximizedToggle,
     };
   },
 };
