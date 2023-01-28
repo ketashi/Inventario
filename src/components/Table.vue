@@ -120,7 +120,7 @@
               class="bg-purple text-white"
               icon="edit"
               size="sm"
-              @click="eactive = true"
+              @click="editBtn(props.row)"
             >
               <q-tooltip class="bg-purple" :offset="[10, 10]">
                 Editar Registro
@@ -243,6 +243,11 @@ export default {
       preview.value = true;
       store.detailsItem(props.samAccountName);
     }
+
+    function editBtn(props) {
+      eactive.value = true;
+      store.editItem(props);
+    }
     //computed
     const pagesNumber = computed(() =>
       Math.ceil(store.rows.length / pagination.value.rowsPerPage)
@@ -258,6 +263,7 @@ export default {
       store,
       notifDelete,
       details,
+      editBtn,
       visibleColumns,
       preview,
       id,

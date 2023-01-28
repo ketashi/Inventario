@@ -6,6 +6,7 @@ export const userStore = defineStore("counter", () => {
   const rows = ref([]);
   const columns = ref([]);
   const details = ref([]);
+  const items = ref([]);
   //getters
   const getData = computed(() => {
     (columns.value = [
@@ -585,6 +586,11 @@ export const userStore = defineStore("counter", () => {
     rows.value = data;
     return data.name;
   };
+  const editItem = (payload) => {
+    items.value = [];
+    items.value = payload;
+    return items;
+  };
   const detailsItem = (payload) => {
     details.value = [];
     const data = rows.value.filter((list) => payload === list.samAccountName);
@@ -623,7 +629,9 @@ export const userStore = defineStore("counter", () => {
     columns,
     getData,
     details,
+    items,
     increment: skipHydrate(increment),
     detailsItem: skipHydrate(detailsItem),
+    editItem: skipHydrate(editItem),
   };
 });

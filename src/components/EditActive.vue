@@ -1,58 +1,36 @@
 <template>
   <q-card>
     <q-bar class="bg-purple text-white">
+      Editar Registro
       <q-space />
       <q-btn dense flat icon="close" v-close-popup>
         <q-tooltip class="bg-white text-purple">Close</q-tooltip>
       </q-btn>
     </q-bar>
-    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+    <q-form class="q-gutter-md" @submit="onSubmit">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 q-pa-md" v-for="item in payload" :key="item.label">
           <q-input
-            filled
-            v-model="name"
-            label="Your name *"
-            hint="Name and surname"
+            outlined
+            clearable
+            v-model="item.value"
+            :label="item.label"
             lazy-rules
             :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
+              (val) =>
+                (val && val.length > 0) || 'El campo no debe estar vacio',
             ]"
           />
         </div>
-        <div class="col-md-6">
-          <q-input
-            filled
-            v-model="name"
-            label="Your name *"
-            hint="Name and surname"
-            lazy-rules
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
-          />
-        </div>
-        <div class="col-md-6">
-          <q-input
-            filled
-            v-model="name"
-            label="Your name *"
-            hint="Name and surname"
-            lazy-rules
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
-          />
-        </div>
-        <div>
-          <q-btn label="Submit" type="submit" color="primary" />
+      </div>
+      <div class="row justify-center text-center">
+        <div class="col-md-12 q-pa-md q-gutter-sm">
           <q-btn
-            label="Reset"
-            type="reset"
-            color="primary"
-            flat
-            class="q-ml-sm"
+            label="Guardar Cambios"
+            type="submit"
+            class="bg-purple text-white"
           />
+          <q-btn label="Cancelar" class="bg-red text-white" />
         </div>
       </div>
     </q-form>
@@ -61,49 +39,124 @@
 
 <script>
 import { ref } from "vue";
+import { useQuasar } from "quasar";
+import { userStore } from "src/stores/activeDirectory/userTable";
 export default {
   setup() {
-    const samAccountName = ref(null);
-    const displayName = ref(null);
-    const typeName = ref(null);
-    const idCustodio = ref(null);
-    const office = ref(null);
-    const departament = ref(null);
-    const enable = ref(null);
-    const whenCreated = ref(null);
-    const downCreated = ref(null);
-    const cde = ref(null);
-    const commit = ref(null);
-    const accountExpirationDate = ref(null);
-    const passwordNeverExpires = ref(null);
-    const passwordLastSet = ref(null);
-    const passwordExpired = ref(null);
-    const passwordNotRequired = ref(null);
-    const lockedOut = ref(null);
-    const title = ref(null);
-    const lastlogondate = ref(null);
-    const whenChanged = ref(null);
+    const store = userStore();
+    const $q = useQuasar();
+    const payload = ref([
+      {
+        value: store.items.samAccountName,
+        label: "Nombre Corto",
+      },
+      {
+        value: store.items.displayName,
+        label: "Descripcion de la Cuenta",
+      },
+      {
+        value: store.items.idCustodio,
+        label: "ID Custodio",
+      },
+      {
+        value: store.items.office,
+        label: "Ubicacion - Sede Agencia",
+      },
+      {
+        value: store.items.departament,
+        label: "Ubicacion - Departamento",
+      },
+      {
+        value: store.items.enable.toString(),
+        label: "Estado (Activo)",
+      },
+      {
+        value: store.items.whenCreated,
+        label: "Fecha de Alta",
+      },
+      {
+        value: store.items.downCreated,
+        label: "Fecha de Baja",
+      },
+      {
+        value: store.items.cde,
+        label: "Pertenece al CDE",
+      },
+      {
+        value: store.items.commit,
+        label: "Comentarios",
+      },
+      {
+        value: store.items.accountExpirationDate.toString(),
+        label: "Fecha_Expiracion",
+      },
+      {
+        value: store.items.passwordNeverExpires.toString(),
+        label: "Pwd_NoExpira",
+      },
+      {
+        value: store.items.passwordLastSet,
+        label: "Pwd_UltimoCambio",
+      },
+      {
+        value: store.items.passwordExpired.toString(),
+        label: "Pwd_Expirado",
+      },
+      {
+        value: store.items.passwordNotRequired.toString(),
+        label: "Pwd_NoRequerido",
+      },
+      {
+        value: store.items.lockedOut.toString(),
+        label: "Cuenta Bloqueda",
+      },
+      {
+        value: store.items.title,
+        label: "Cargo",
+      },
+      {
+        value: store.items.lastlogondate,
+        label: "Ultimo Logueo",
+      },
+      {
+        value: store.items.whenChanged,
+        label: "Ultimo Cambio",
+      },
+    ]);
+    const onSubmit = () => {
+      $q.notify({
+        message:
+          "¿Desea aplicar los cambios del Registro Permanente de la Base de Datos?.",
+        color: "blue-10",
+        icon: "question_mark",
+        position: "top",
+        actions: [
+          {
+            label: "Aceptar",
+            color: "purple",
+            handler: () => {
+              $q.notify({
+                message: "Se Aplicaron los cambios correctamente.",
+                color: "primary",
+                position: "top",
+                icon: "approval",
+              });
+            },
+          },
+          {
+            label: "Cancelar",
+            color: "white",
+            handler: () => {
+              /* ... */
+            },
+          },
+        ],
+      });
+    };
     return {
-      samAccountName,
-      displayName,
-      typeName,
-      idCustodio,
-      office,
-      departament,
-      enable,
-      whenCreated,
-      downCreated,
-      cde,
-      commit,
-      accountExpirationDate,
-      passwordNeverExpires,
-      passwordLastSet,
-      passwordExpired,
-      passwordNotRequired,
-      lockedOut,
-      title,
-      lastlogondate,
-      whenChanged,
+      store,
+      payload,
+      onSubmit,
     };
   },
 };
